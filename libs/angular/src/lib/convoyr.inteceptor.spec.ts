@@ -12,6 +12,7 @@ import { createRequest, createResponse, Convoyr } from '@convoyr/core';
 import { EMPTY, of, throwError } from 'rxjs';
 
 import { ConvoyrInterceptor } from './convoyr.interceptor';
+import { ConvoyrService } from './convoyr.service';
 
 function asMock<TReturn, TArgs extends any[]>(
   value: (...TArgs) => TReturn
@@ -20,18 +21,18 @@ function asMock<TReturn, TArgs extends any[]>(
 }
 
 describe('ConvoyrInterceptor', () => {
-  let convoyr: Convoyr;
+  let convoyrService: ConvoyrService;
   let interceptor: ConvoyrInterceptor;
   let next: HttpHandler;
   let observerSpy: ObserverSpy<HttpResponse<unknown>>;
 
   beforeEach(() => {
-    interceptor = new ConvoyrInterceptor({ plugins: [] });
+    convoyrService = new ConvoyrService({ plugins: [] });
+    interceptor = new ConvoyrInterceptor(convoyrService);
     observerSpy = new ObserverSpy({ expectErrors: true });
-    convoyr = interceptor['_convoyr'];
 
-    /* Mock `Convoyr.handle`. */
-    jest.spyOn(convoyr, 'handle');
+    /* Mock `ConvoyrService.handle`. */
+    jest.spyOn(convoyrService, 'handle');
 
     next = {
       /* Just to avoid pipe error. */
@@ -49,8 +50,8 @@ describe('ConvoyrInterceptor', () => {
 
   it('should convert Angular HttpRequest to ConvoyrRequest before handing it to plugins', () => {
     /* Check that request is transformed from Angular HttpRequest to ConvoyrRequest and forwarded to `convoyr`. */
-    expect(convoyr.handle).toHaveBeenCalledTimes(1);
-    expect(convoyr.handle).toHaveBeenCalledWith(
+    expect(convoyrService.handle).toHaveBeenCalledTimes(1);
+    expect(convoyrService.handle).toHaveBeenCalledWith(
       expect.objectContaining({
         request: createRequest({ url: 'https://test.com', method: 'GET' }),
       })
@@ -86,7 +87,9 @@ describe('ConvoyrInterceptor', () => {
         new HttpResponse({ body: { answer: 42 } })
       )
     );
-    const { request, httpHandler } = asMock(convoyr.handle).mock.calls[0][0];
+    const { request, httpHandler } = asMock(
+      convoyrService.handle
+    ).mock.calls[0][0];
 
     httpHandler.handle({ request }).subscribe(observerSpy);
 
@@ -103,7 +106,9 @@ describe('ConvoyrInterceptor', () => {
     asMock(next.handle).mockReturnValue(
       of(new HttpResponse({ body: { answer: 42 } }))
     );
-    const { request, httpHandler } = asMock(convoyr.handle).mock.calls[0][0];
+    const { request, httpHandler } = asMock(
+      convoyrService.handle
+    ).mock.calls[0][0];
 
     httpHandler.handle({ request }).subscribe(observerSpy);
 
@@ -134,7 +139,9 @@ describe('ConvoyrInterceptor', () => {
         })
       )
     );
-    const { request, httpHandler } = asMock(convoyr.handle).mock.calls[0][0];
+    const { request, httpHandler } = asMock(
+      convoyrService.handle
+    ).mock.calls[0][0];
 
     httpHandler.handle({ request }).subscribe(observerSpy);
 

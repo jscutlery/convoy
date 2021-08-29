@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, NgModule, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
+import { Convoyr } from '@convoyr/angular';
 import { WithCacheMetadata } from '@convoyr/plugin-cache';
-import { Subscription } from 'rxjs';
-import { map, pluck, startWith, switchMap, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, startWith, switchMap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { Bike } from '../bike/bike';
 import { BikeCardModule } from '../bike/bike-card.component';
+import { createLoggerPlugin } from '../http/create-logger-plugin';
 
 @Component({
   selector: 'app-bike-search',
@@ -75,6 +75,7 @@ export class BikeSearchComponent {
           params: {
             q: query,
           },
+          plugins: [createLoggerPlugin()],
         }
       )
     ),
@@ -85,7 +86,7 @@ export class BikeSearchComponent {
     map(({ cacheMetadata }) => cacheMetadata.isFromCache)
   );
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: Convoyr) {}
 }
 
 @NgModule({

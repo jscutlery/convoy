@@ -26,13 +26,15 @@ export class Convoyr {
   handle({
     request,
     httpHandler,
+    plugins,
   }: {
     request: ConvoyrRequest;
     httpHandler: NextHandler;
+    plugins?: ConvoyrPlugin[];
   }): Observable<ConvoyrResponse> {
     return this._handle({
       request,
-      plugins: this._plugins,
+      plugins: plugins != null ? plugins : this._plugins,
       httpHandler,
     });
   }

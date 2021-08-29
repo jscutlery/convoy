@@ -1,41 +1,30 @@
 import {
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
   HttpResponse,
-  HttpErrorResponse,
 } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { Convoyr, ConvoyrConfig, ConvoyrResponse } from '@convoyr/core';
+import { Injectable } from '@angular/core';
+import { ConvoyrResponse } from '@convoyr/core';
 import { Observable, throwError } from 'rxjs';
-import { filter, map, catchError } from 'rxjs/operators';
+import { catchError, filter, map } from 'rxjs/operators';
 
+import { ConvoyrService } from './convoyr.service';
 import {
+  ErrorBody,
+  fromNgErrorResponse,
   fromNgRequest,
   fromNgResponse,
+  toNgErrorResponse,
   toNgRequest,
   toNgResponse,
-  fromNgErrorResponse,
-  toNgErrorResponse,
-  ErrorBody,
 } from './http-converter';
-
-/**
- * @internal
- */
-export const _CONVOYR_CONFIG = new InjectionToken<ConvoyrConfig>(
-  'Convoyr Config'
-);
 
 @Injectable()
 export class ConvoyrInterceptor implements HttpInterceptor {
-  private _convoyr = new Convoyr(this._convoyConfig);
-
-  constructor(
-    @Inject(_CONVOYR_CONFIG)
-    private _convoyConfig: ConvoyrConfig
-  ) {}
+  constructor(private _convoyr: ConvoyrService) {}
 
   intercept(
     ngRequest: HttpRequest<any>,

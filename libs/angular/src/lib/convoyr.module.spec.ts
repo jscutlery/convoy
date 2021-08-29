@@ -6,7 +6,8 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { createSpyPlugin, SpyPlugin } from '@convoyr/core/testing';
 import { ObserverSpy } from '@hirez_io/observer-spy';
-import { _CONVOYR_CONFIG } from './convoyr.interceptor';
+
+import { _CONVOYR_CONFIG } from './convoyr.config';
 import { ConvoyrModule } from './convoyr.module';
 
 describe('ConvoyrModule', () => {

@@ -1,5 +1,3 @@
-import { and, matchMethod } from '@convoyr/core';
-import { matchPath } from './../../../../../libs/core/src/lib/matchers/match-path/match-path';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,8 +6,8 @@ import { ConvoyrModule } from '@convoyr/angular';
 import { createAuthPlugin } from '@convoyr/plugin-auth';
 import { createCachePlugin } from '@convoyr/plugin-cache';
 import { createRetryPlugin } from '@convoyr/plugin-retry';
+
 import { AuthService } from '../auth/auth.service';
-import { createLoggerPlugin } from './create-logger-plugin';
 import { rejectUnknownOriginsPlugin } from './reject-unknown-origins-plugin';
 
 @NgModule({
@@ -21,7 +19,6 @@ import { rejectUnknownOriginsPlugin } from './reject-unknown-origins-plugin';
         return {
           plugins: [
             rejectUnknownOriginsPlugin,
-            createLoggerPlugin(),
             createCachePlugin({
               addCacheMetadata: true,
             }),
