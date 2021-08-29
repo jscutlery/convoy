@@ -9,7 +9,7 @@
   },
   "peerDependencies": {
     "@convoyr/core": ">= 3.0.0",
-    "rxjs": "^6.5.4"
+    "rxjs": "^7.0.0"
   },
   "dependencies": {
     "buffer": "^6.0.0",

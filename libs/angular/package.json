@@ -14,6 +14,6 @@
     "@angular/common": ">= 9.1.11",
     "@angular/core": ">= 9.1.11",
     "@convoyr/core": ">= 3.0.0",
-    "rxjs": "^6.5.4"
+    "rxjs": "^7.0.0"
   }
 }
